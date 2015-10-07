@@ -31,10 +31,10 @@ class MP_Cart {
     }
 
     $freq_options = array(
-      '1w' => 'Every Week',
-      '2w' => 'Every 2 Weeks',
-      '1m' => 'Once a Month',
-      '2m' => 'Every 2 Months'
+      'w1' => 'Every Week',
+      'w2' => 'Every 2 Weeks',
+      'm1' => 'Once a Month',
+      'm2' => 'Every 2 Months'
     );
     $select_options = '';
     foreach ($freq_options as $key => $value) {
@@ -75,8 +75,10 @@ CONTENT;
         WC()->session->set('mp_sub_freq', $_REQUEST['mp_sub_freq']);
       }
     } else {
-      WC()->session->set('mp_is_sub', false);
-      WC()->session->set('mp_sub_freq', '');
+      if (isset($_REQUEST['mp_sub_freq'])) {
+        WC()->session->set('mp_is_sub', false);
+        WC()->session->set('mp_sub_freq', '');
+      }
     }
   }
 

@@ -21,7 +21,8 @@ if (!class_exists('MorePlease')):
 final class MorePlease {
 
   public $version = '0.0.1';
-  public $cart = null;
+  public $cart;
+  public $checkout;
 
   protected static $instance = null;
 
@@ -42,6 +43,7 @@ final class MorePlease {
     if ($this->is_request('frontend')) {
       include_once 'includes/class-mp-assets.php';
       include_once 'includes/class-mp-cart.php';
+      include_once 'includes/class-mp-checkout.php';
     }
   }
 
@@ -53,6 +55,7 @@ final class MorePlease {
     add_filter('woocommerce_integrations', array($this, 'add_integration'));
     if ($this->is_request('frontend')) {
       $this->cart = new MP_Cart();
+      $this->checkout = new MP_Checkout();
     }
   }
 
