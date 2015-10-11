@@ -14,8 +14,7 @@ class MP_Checkout {
   public function __construct() {
 
     add_action(
-      //'woocommerce_payment_complete',
-      'init',
+      'woocommerce_payment_complete',
       array($this, 'maybe_create_subscription')
     );
 
@@ -28,18 +27,28 @@ class MP_Checkout {
 
   public function maybe_create_subscription() {
 
-    //$is_subscription = WC()->session->get('mp_is_sub');
+    if (empty(MP_Integration::$api_key)) {
+      return;
+    }
+
+    $is_subscription = WC()->session->get('mp_is_sub');
 
 // DEBUG
+/*
 $order_id = 15;
 $is_subscription = true;
+*/
 
     if ($is_subscription) {
 
       update_post_meta($order_id, 'mp_order_type', 'new');
       $renewal_frequency = WC()->session->get('mp_sub_freq');
+
 // DEBUG
+/*
 $renewal_frequency = 'm1';
+*/
+
       update_post_meta($order_id, 'mp_frequency', $renewal_frequency);
 
       $order = new WC_Order($order_id);
@@ -77,12 +86,13 @@ $renewal_frequency = 'm1';
       }
 
       $data = array(
+        'apiKey' => MP_Integration::$api_key,
         'subscription' => array(
           'renewalFrequencyId' => $renewal_frequency,
           'shippingMethodId' => $shipping_method_id,
           'shippingMethodName' => $shipping_method_name,
-          'shippingCost' => $shipping_cost,
-          'companyRole' => 'mptest'
+          'shippingCost' => $shipping_cost
+          //'companyRole' => 'mptest'
         ),
         'customer' => array(
           'externalId' => $customer->ID,
@@ -108,7 +118,19 @@ $renewal_frequency = 'm1';
         'Content-Type: application/json',
         'Content-Length: ' . strlen($data_json)
       ));
-      $subscription_id = json_decode(curl_exec($ch));
+
+      $subscription_id = null;
+      $response = json_decode(curl_exec($ch));
+      if (curl_errno($ch)) {
+        // TODO - error handling
+        echo curl_error($ch);exit;
+      } else if (is_object($response)) {
+        // TODO - error handling
+        var_dump($response);exit;
+      } else {
+        $subscription_id = $response;
+      }
+      curl_close($ch);
 
       if (!empty($subscription_id)) {
         update_post_meta($order_id, 'mp_subscription_id', $subscription_id);
@@ -125,6 +147,11 @@ $renewal_frequency = 'm1';
    * @param  Object  $checkout  Checkout object.
    */
   public function disable_guest_checkout($checkout) {
+
+    if (empty(MP_Integration::$api_key)) {
+      return;
+    }
+
     $checkout->enable_guest_checkout = false;
     $checkout->must_create_account = true;
   }

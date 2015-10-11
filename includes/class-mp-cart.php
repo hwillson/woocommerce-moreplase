@@ -24,6 +24,10 @@ class MP_Cart {
 
   public function show_subscription_options() {
 
+    if (empty(MP_Integration::$api_key)) {
+      return;
+    }
+
     $is_subscription = WC()->session->get('mp_is_sub');
     $checked = '';
     if ($is_subscription) {
@@ -69,6 +73,11 @@ CONTENT;
   }
 
   public function store_subscription_options() {
+
+    if (empty(MP_Integration::$api_key)) {
+      return;
+    }
+
     if (isset($_REQUEST['mp_is_sub'])) {
       WC()->session->set('mp_is_sub', true);
       if (isset($_REQUEST['mp_sub_freq'])) {

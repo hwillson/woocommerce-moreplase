@@ -11,6 +11,8 @@ if (!class_exists('MP_Integration')):
  */
 class MP_Integration extends WC_Integration {
 
+  public static $api_key;
+
   /**
    * Default constructor. Intialize integration defaults and settings
    * fields.
@@ -26,7 +28,7 @@ class MP_Integration extends WC_Integration {
     $this->init_form_fields();
     $this->init_settings();
 
-    $this->api_key = $this->get_option('api_key');
+    self::$api_key = $this->get_option('api_key');
 
     add_action(
       'woocommerce_update_options_integration_' .  $this->id,

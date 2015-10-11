@@ -23,6 +23,7 @@ final class MorePlease {
   public $version = '0.0.1';
   public $cart;
   public $checkout;
+  public $web_service;
 
   protected static $instance = null;
 
@@ -44,6 +45,7 @@ final class MorePlease {
       include_once 'includes/class-mp-assets.php';
       include_once 'includes/class-mp-cart.php';
       include_once 'includes/class-mp-checkout.php';
+      include_once 'includes/class-mp-web-service.php';
     }
   }
 
@@ -56,6 +58,7 @@ final class MorePlease {
     if ($this->is_request('frontend')) {
       $this->cart = new MP_Cart();
       $this->checkout = new MP_Checkout();
+      $this->web_service = new MP_Web_Service();
     }
   }
 
