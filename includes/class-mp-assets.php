@@ -10,7 +10,7 @@ class MP_Assets {
 
   public function __construct() {
     add_action('wp_enqueue_scripts', array($this, 'add_styles'));
-    //add_action('enqueue_scripts', array($this, 'add_scripts'));
+    add_action('wp_enqueue_scripts', array($this, 'add_scripts'));
   }
 
   public function add_styles() {
@@ -19,6 +19,16 @@ class MP_Assets {
       MP()->plugin_url() . '/assets/css/main.css',
       array(),
       MP_VERSION
+    );
+  }
+
+  public function add_scripts() {
+    wp_enqueue_script(
+      'mp-scripts',
+      MP()->plugin_url() . '/assets/js/main.js',
+      array('jquery'),
+      MP_VERSION,
+      true
     );
   }
 
