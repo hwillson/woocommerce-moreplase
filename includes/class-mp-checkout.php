@@ -8,9 +8,6 @@ if (!class_exists('MP_Checkout')):
 
 class MP_Checkout {
 
-  //private $mp_url = 'https://moreplease.io';
-  private $mp_url = 'http://moreplease.local:3000';
-
   public function __construct() {
 
     add_action(
@@ -110,7 +107,9 @@ $renewal_frequency = 'm1';
 
       $data_json = json_encode(array($data));
 
-      $ch = curl_init($this->get_mp_url() . '/methods/api_CreateNewSubscription');
+      $ch = curl_init(
+        MP_Environment::MP_URL . '/methods/api_CreateNewSubscription'
+      );
       curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
       curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -154,10 +153,6 @@ $renewal_frequency = 'm1';
 
     $checkout->enable_guest_checkout = false;
     $checkout->must_create_account = true;
-  }
-
-  public function get_mp_url() {
-    return $this->mp_url;
   }
 
 }

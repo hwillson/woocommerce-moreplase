@@ -9,7 +9,7 @@ jQuery(function () {
       var postData = {
         subscriptionId: MP_SUB_ID
       };
-      $.post(MP_URL + '/api_SubscriptionRenewalDayCount', postData).done(
+      $.post(MP_URL + '/methods/api_SubscriptionRenewalDayCount', postData).done(
         function (renewalDays) {
           var msg;
           if (renewalDays == 0) {

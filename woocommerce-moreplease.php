@@ -42,6 +42,7 @@ final class MorePlease {
   public function includes() {
     include_once 'includes/class-mp-integration.php';
     if ($this->is_request('frontend')) {
+      include_once 'includes/class-mp-environment.php';
       include_once 'includes/class-mp-assets.php';
       include_once 'includes/class-mp-cart.php';
       include_once 'includes/class-mp-checkout.php';
