@@ -24,9 +24,16 @@ class MP_Assets {
 
   public function add_scripts() {
     wp_enqueue_script(
+      'jquery-postmessage',
+      MP()->plugin_url() . '/assets/js/jquery.ba-postmessage.min.js',
+      array('jquery'),
+      MP_VERSION,
+      true
+    );
+    wp_enqueue_script(
       'mp-scripts',
       MP()->plugin_url() . '/assets/js/main.js',
-      array('jquery'),
+      array('jquery', 'jquery-postmessage'),
       MP_VERSION,
       true
     );

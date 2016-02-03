@@ -25,12 +25,9 @@ class MP_Subscription {
   }
 
   public function load_subscription_id() {
-    if (get_current_user_id()) {
-      $subscription_id =
-        get_user_meta(get_current_user_id(), self::SUBSCRIPTION_ID_KEY, true);
-      if ($subscription_id) {
-        echo "<script>var MP_SUB_ID='$subscription_id';</script>";
-      }
+    $subscription_id = self::get_subscription_id();
+    if ($subscription_id) {
+      echo "<script>var MP_SUB_ID='$subscription_id';</script>";
     }
   }
 
@@ -54,6 +51,15 @@ class MP_Subscription {
       return $managerContent;
     }
 
+  }
+
+  public static function get_subscription_id() {
+    $subscription_id = null;
+    if (get_current_user_id()) {
+      $subscription_id =
+        get_user_meta(get_current_user_id(), self::SUBSCRIPTION_ID_KEY, true);
+    }
+    return $subscription_id;
   }
 
 }

@@ -48,6 +48,7 @@ final class MorePlease {
       include_once 'includes/class-mp-checkout.php';
       include_once 'includes/class-mp-web-service.php';
       include_once 'includes/class-mp-subscription.php';
+      include_once 'includes/class-mp-product.php';
     }
   }
 
@@ -62,6 +63,7 @@ final class MorePlease {
       $this->checkout = new MP_Checkout();
       $this->web_service = new MP_Web_Service();
       $this->subscription = new MP_Subscription();
+      $this->product = new MP_Product();
     }
   }
 

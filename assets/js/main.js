@@ -22,5 +22,17 @@ jQuery(function () {
       );
     }
 
+    // Dynamicall adjust the size of subscription manager iframe.
+    if ($('.mp-iframe').length) {
+      var ifHeight;
+      jQuery.receiveMessage(function (e) {
+        var height = Number(e.data.replace(/.*if_height=(\d+)(?:&|$)/, '$1'));
+        if (!isNaN(height) && height > 0 && height !== ifHeight) {
+          ifHeight = height;
+          jQuery('.mp-iframe').height(height);
+        }
+      });
+    }
+
   }(jQuery));
 })
