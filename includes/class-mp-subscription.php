@@ -26,9 +26,7 @@ class MP_Subscription {
 
   public function load_subscription_id() {
     $subscription_id = self::get_subscription_id();
-    if ($subscription_id) {
-      echo "<script>var MP_SUB_ID='$subscription_id';</script>";
-    }
+    echo "<script>var MP_SUB_ID='$subscription_id';</script>";
   }
 
   public function subscription_manager() {

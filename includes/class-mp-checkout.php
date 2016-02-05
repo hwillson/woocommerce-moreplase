@@ -22,7 +22,7 @@ class MP_Checkout {
 
   }
 
-  public function maybe_create_subscription() {
+  public function maybe_create_subscription($order_id) {
 
     if (empty(MP_Integration::$api_key)) {
       return;
