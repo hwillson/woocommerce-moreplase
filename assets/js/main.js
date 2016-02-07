@@ -22,6 +22,19 @@ jQuery(function () {
       );
     }
 
+
+    // Fetch and display next ship date for a subscription renewal order.
+    if ($('.js-mp-next-ship-date').length && MP_SUB_ID) {
+      var postData = {
+        subscriptionId: MP_SUB_ID
+      };
+      $.post(MP_URL + '/methods/api_SubscriptionRenewalDate', postData).done(
+        function (renewalDate) {
+          $('.js-mp-next-ship-date').html(renewalDate);
+        }
+      );
+    }
+
     // Dynamicall adjust the size of subscription manager iframe.
     if ($('.mp-iframe').length) {
       var ifHeight;
