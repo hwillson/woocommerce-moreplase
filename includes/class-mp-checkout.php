@@ -29,23 +29,10 @@ class MP_Checkout {
     }
 
     $is_subscription = WC()->session->get('mp_is_sub');
-
-// DEBUG
-/*
-$order_id = 15;
-$is_subscription = true;
-*/
-
     if ($is_subscription) {
 
       update_post_meta($order_id, 'mp_order_type', 'new');
       $renewal_frequency = WC()->session->get('mp_sub_freq');
-
-// DEBUG
-/*
-$renewal_frequency = 'm1';
-*/
-
       update_post_meta($order_id, 'mp_frequency', $renewal_frequency);
 
       $order = new WC_Order($order_id);
@@ -89,7 +76,6 @@ $renewal_frequency = 'm1';
           'shippingMethodId' => $shipping_method_id,
           'shippingMethodName' => $shipping_method_name,
           'shippingCost' => $shipping_cost
-          //'companyRole' => 'mptest'
         ),
         'customer' => array(
           'externalId' => $customer->ID,

@@ -12,6 +12,7 @@ if (!class_exists('MP_Integration')):
 class MP_Integration extends WC_Integration {
 
   public static $api_key;
+  public static $discount_coupon_code;
 
   /**
    * Default constructor. Intialize integration defaults and settings
@@ -29,6 +30,7 @@ class MP_Integration extends WC_Integration {
     $this->init_settings();
 
     self::$api_key = $this->get_option('api_key');
+    self::$discount_coupon_code = $this->get_option('discount_coupon_code');
 
     add_action(
       'woocommerce_update_options_integration_' .  $this->id,
@@ -42,6 +44,7 @@ class MP_Integration extends WC_Integration {
    */
   public function init_form_fields() {
     $this->form_fields = array(
+
       'api_key' => array(
         'title' => __('MorePlease API Key', 'woocommerce-mp'),
         'type' => 'text',
@@ -52,6 +55,20 @@ class MP_Integration extends WC_Integration {
         'desc_tip' => true,
         'default' => ''
       ),
+
+      'discount_coupon_code' => array(
+        'title' => __('Discount Coupon Code', 'woocommerce-mp'),
+        'type' => 'text',
+        'description' =>
+          __('Interested in giving subscribers a discount? Enter the '
+            . 'applicable coupon code here to have it applied when changing a '
+            . 'cart to a subscription, and/or when existing subscribers login. '
+            . 'Leave this field empty for no discount.',
+            'woocommerce-mp'),
+        'desc_tip' => true,
+        'default' => ''
+      ),
+
     );
   }
 

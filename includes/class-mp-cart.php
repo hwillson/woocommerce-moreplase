@@ -20,6 +20,11 @@ class MP_Cart {
       array($this, 'store_subscription_options')
     );
 
+    add_action(
+      'template_redirect',
+      array($this, 'maybe_remove_discount')
+    );
+
   }
 
   public function show_subscription_options() {
@@ -80,6 +85,7 @@ CONTENT;
 
     if (isset($_REQUEST['mp_is_sub'])) {
       WC()->session->set('mp_is_sub', true);
+      $this->apply_discount();
       if (isset($_REQUEST['mp_sub_freq'])) {
         WC()->session->set('mp_sub_freq', $_REQUEST['mp_sub_freq']);
       }
@@ -91,6 +97,12 @@ CONTENT;
     }
   }
 
+  public function maybe_remove_discount() {
+    if (!isset($_REQUEST['mp_is_sub']) && isset($_REQUEST['mp_sub_freq'])) {
+      $this->remove_discount();
+    }
+  }
+
   private function set_selected_frequency($value) {
     $selected_frequency = WC()->session->get('mp_sub_freq');
     $selected = '';
@@ -98,6 +110,23 @@ CONTENT;
       $selected = 'selected';
     }
     return $selected;
+  }
+
+  private function apply_discount() {
+    $discount_coupon_code = MP_Integration::$discount_coupon_code;
+    if (!empty($discount_coupon_code)) {
+      if (!WC()->cart->has_discount($discount_coupon_code)) {
+        WC()->cart->add_discount($discount_coupon_code);
+      }
+      wc_clear_notices();
+    }
+  }
+
+  private function remove_discount() {
+    $discount_coupon_code = MP_Integration::$discount_coupon_code;
+    if (!empty($discount_coupon_code)) {
+      WC()->cart->remove_coupon($discount_coupon_code);
+    }
   }
 
 }
