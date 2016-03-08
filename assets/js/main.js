@@ -47,5 +47,67 @@ jQuery(function () {
       });
     }
 
+
+// TODO - working on this ...
+    // Add product to subscription.
+    $('body').on('click', '.js-mp-add-to-sub', function (event) {
+
+      var button, boxContainer, productData, buttonText;
+
+      event.preventDefault();
+
+      if (!$(this).hasClass('adding')) {
+
+        button = $(this).addClass('adding');
+
+        boxContainer = $(this).closest('.js-grid-item, form');
+
+        productData = {
+          nonce:  tfAjax.nonce,
+          product_id: $(this).attr('data-id'),
+          variation_id: $(boxContainer).find('.js-variation').val(),
+          quantity: $(boxContainer).find('.js-quantity').val()
+        }
+
+        buttonText = $(this).find('.text').text();
+        $(this).find('.text').html('Adding...');
+
+        $.post('?wc-ajax=load_box_item', productData).done(function (boxItem) {
+          if (boxItem) {
+            var boxData = {
+              subscriptionId: $('body').attr('data-box-id'),
+              productId: boxItem.productId,
+              variationId: boxItem.variationId,
+              quantity: boxItem.quantity,
+              discountPercent: 10,
+              companyRole: boxItem.companyRole
+            };
+            $.ajax({
+              url: boxApi + '/api_AddToSubscription',
+              method: 'POST',
+              data: JSON.stringify(boxData),
+              contentType: 'application/json',
+              success: function (boxItemId) {
+                if (boxItemId) {
+                  $.publish('box', boxItem);
+                  button.removeClass('adding').find('.text').html('Added!');
+                  button.blur();
+                  setTimeout(function () {
+                    button.find('.text').html(buttonText);
+                  }, 2000);
+                } else {
+                  console.log(
+                    'Unable to add product to subscription: ',
+                    boxData
+                  );
+                  button.removeClass('adding').find('.text').html(buttonText);
+                }
+              }
+            });
+          }
+        });
+
+      }
+
   }(jQuery));
 })

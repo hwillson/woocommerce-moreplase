@@ -35,9 +35,7 @@ class MP_Cart {
   public function show_subscription_options() {
     if (MP_Integration::$api_key) {
       $subscription_options = null;
-      $user_id = get_current_user_id();
-      if ($user_id
-          && !empty(get_user_meta($user_id, 'mp_subscription_id', true))) {
+      if (MP_Subscription::get_subscription_id()) {
         $subscription_options = $this->existing_subscriber_options();
       } else {
         $subscription_options = $this->new_subscriber_options();
